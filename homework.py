@@ -56,7 +56,7 @@ class Running(Training):
     CALORIES_MEAN_SPEED_MULTIPLIER = 18
     CALORIES_MEAN_SPEED_SHIFT = 1.79
 
-    def __init__(self, action, duration, weight):
+    def __init__(self, action: int, duration: float, weight: float):
         super().__init__(action, duration, weight)
 
     def get_spent_calories(self) -> float:
@@ -80,16 +80,16 @@ class SportsWalking(Training):
     CALORIES_WEIGHT_MULTIPLIER = 0.035
     CALORIES_SPEED_HEIGHT_MULTIPLIER = 0.029
 
-    def __init__(self, action: int, duration: float, weight: float, height: float):
+    def __init__(
+            self, action: int, duration: float, weight: float, height: float):
         super().__init__(action, duration, weight)
         self.height = height
 
     def get_spent_calories(self) -> float:
-        return ((
-                        self.CALORIES_WEIGHT_MULTIPLIER
-                        * self.weight
-                        + ((self.get_mean_speed() * self.KMH_IN_MSEC) ** 2 / (self.height / self.CM_IN_M))
-                        * self.CALORIES_SPEED_HEIGHT_MULTIPLIER * self.weight)
+        return ((self.CALORIES_WEIGHT_MULTIPLIER * self.weight
+                 + ((self.get_mean_speed() * self.KMH_IN_MSEC)
+                    ** 2 / (self.height / self.CM_IN_M))
+                 * self.CALORIES_SPEED_HEIGHT_MULTIPLIER * self.weight)
                 * self.duration * self.MIN_IN_H)
 
     def show_training_info(self) -> InfoMessage:
@@ -106,7 +106,8 @@ class Swimming(Training):
     CALORIES_MEAN_SPEED_SHIFT = 1.1
     CALORIES_WEIGHT_MULTIPLIER = 2
 
-    def __init__(self, action, duration, weight, length_pool, count_pool):
+    def __init__(self, action: int, duration: float,
+                 weight: float, length_pool: float, count_pool: float):
         super().__init__(action, duration, weight)
         self.length_pool = length_pool
         self.count_pool = count_pool
@@ -116,8 +117,10 @@ class Swimming(Training):
                 * self.count_pool / self.M_IN_KM / self.duration)
 
     def get_spent_calories(self) -> float:
-        return ((self.get_mean_speed() + self.CALORIES_MEAN_SPEED_SHIFT)
-                * self.CALORIES_WEIGHT_MULTIPLIER * self.weight * self.duration)
+        return ((self.get_mean_speed()
+                + self.CALORIES_MEAN_SPEED_SHIFT)
+                * self.CALORIES_WEIGHT_MULTIPLIER
+                * self.weight * self.duration)
 
     def show_training_info(self) -> InfoMessage:
         """Вернуть информационное сообщение о выполненной тренировке."""
