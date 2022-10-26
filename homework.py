@@ -161,6 +161,3 @@ if __name__ == '__main__':
     for workout_type, data in packages:
         training = read_package(workout_type, data)
         main(training)
-
-a = InfoMessage('Swimming', 1, 75, 1, 80)
-print(a.get_message())
