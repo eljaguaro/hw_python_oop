@@ -1,5 +1,6 @@
+import typing
 from dataclasses import dataclass, asdict
-from typing import Dict, Type
+from typing import Type
 
 
 @dataclass
@@ -21,8 +22,8 @@ class InfoMessage:
                                self.duration, self.distance,
                                self.speed, self.calories))
         return ('{5}: {0:}; {6}: {1:0.3f} ч.; '
-                '{7}: {2:0.3f} км; {8}: {3:0.3f} км/ч; '
-                '{9}: {4:0.3f}.'.format(*d.values()))
+                '{7}: {2:0.3f} км.; {8}: {3:0.3f} км/ч.; '
+                '{9}: {4:0.3f}; '.format(*d.values()))
 
 
 class Training:
@@ -119,13 +120,12 @@ class Swimming(Training):
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    workout_types: Dict[str, Type[Training]] = {
-        'SWM': Swimming,
-        'RUN': Running,
-        'WLK': SportsWalking}
-    for i in data:
-        if type(i) not in (int, float):
-            print(f'{i}Work with Numbers Only')
+    workout_types: dict[str, Type] = {'SWM': Swimming,
+                                      'RUN': Running,
+                                      'WLK': SportsWalking}
+    for i in data[1::]:
+        if type(i) is not int:
+            raise TypeError('Work with Numbers Only')
         if i < 0:
             raise ValueError('Work with Positive Numbers Only')
     return workout_types[workout_type](*data)
@@ -139,7 +139,7 @@ def main(training: Training) -> None:
 
 if __name__ == '__main__':
     packages = [
-        ('SWM', [720, 1.5, 80, 25, 40]),
+        ('SWM', [720, 1, 80, 25, 40]),
         ('RUN', [15000, 1, 75]),
         ('WLK', [9000, 1, 75, 180]),
     ]
