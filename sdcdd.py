@@ -1,19 +1,9 @@
-from dataclasses import dataclass, field, asdict
+msg = ('Тип тренировки: {}; '
+       'Длительность:{} ч.; '
+       'Дистанция:{} км; '
+       'Ср. скорость:{} км/ч; '
+       'Потрачено ккал:{}.')
 
-
-@dataclass
-class User:
-    name: str
-    age: int
-
-class qqq:
-    name: str
-    age: int
-    def __init__(self, name, age):
-        self.user = User(name, age)
-
-    def get_dataclass(self):
-        return asdict(self.user)
-
-a = qqq('waq', 3)
-print(a.get_dataclass())
+d = {'training_type': 'Swimming', 'duration': 1.5, 'distance': 0.9935999999999999, 'speed': 0.6666666666666666,
+     'calories': 423.99999999999994}
+print(msg.format(*d))

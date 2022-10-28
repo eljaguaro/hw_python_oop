@@ -10,19 +10,14 @@ class InfoMessage:
     distance: float
     speed: float
     calories: float
-    TT_MSG: str = 'Тип тренировки'
-    DUR_MSG: str = 'Длительность'
-    DIS_MSG: str = 'Дистанция'
-    SPD_MSG: str = 'Ср. скорость'
-    CLR_MSG: str = 'Потрачено ккал'
+    msg = ('Тип тренировки: {}; '
+           'Длительность: {:0.3f} ч.; '
+           'Дистанция: {:0.3f} км; '
+           'Ср. скорость: {:0.3f} км/ч; '
+           'Потрачено ккал: {:0.3f}.')
 
     def get_message(self):
-        d = asdict(InfoMessage(self.training_type.format(),
-                               self.duration, self.distance,
-                               self.speed, self.calories))
-        return ('{5}: {0:}; {6}: {1:0.3f} ч.; '
-                '{7}: {2:0.3f} км; {8}: {3:0.3f} км/ч; '
-                '{9}: {4:0.3f}.'.format(*d.values()))
+        return self.msg.format(*asdict(self).values())
 
 
 class Training:
@@ -60,8 +55,6 @@ class Training:
 
 class Running(Training):
     """Тренировка: бег."""
-    LEN_STEP: float = 0.65
-    M_IN_KM: int = 1000
     CALORIES_MEAN_SPEED_MULTIPLIER: int = 18
     CALORIES_MEAN_SPEED_SHIFT: float = 1.79
 
@@ -74,7 +67,6 @@ class Running(Training):
 
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
-    LEN_STEP: float = 0.65
     KMH_IN_MSEC: float = 0.278
     CM_IN_M: int = 100
     CALORIES_WEIGHT_MULTIPLIER: float = 0.035
@@ -123,11 +115,8 @@ def read_package(workout_type: str, data: list) -> Training:
         'SWM': Swimming,
         'RUN': Running,
         'WLK': SportsWalking}
-    for i in data:
-        if type(i) not in (int, float):
-            print(f'{i}Work with Numbers Only')
-        if i < 0:
-            raise ValueError('Work with Positive Numbers Only')
+    if workout_type not in workout_types:
+        raise ValueError(f'вид тренировки "{workout_type}" отсутствует ')
     return workout_types[workout_type](*data)
 
 

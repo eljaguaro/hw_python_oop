@@ -17,13 +17,13 @@ class InfoMessage:
     SPD_MSG: str = 'Ср. скорость'
     CLR_MSG: str = 'Потрачено ккал'
 
-    def get_message(self):
-        d = asdict(InfoMessage(self.training_type.format(),
+    def __str__(self):
+        d = asdict(InfoMessage(self.training_type,
                                self.duration, self.distance,
                                self.speed, self.calories))
-        return ('{5}: {0:}; {6}: {1:0.3f} ч.; '
-                '{7}: {2:0.3f} км.; {8}: {3:0.3f} км/ч.; '
-                '{9}: {4:0.3f}; '.format(*d.values()))
+        print(d)
+        print()
+        return ('{5}: {0}; {5я}: {1}; {6}: {2}; {7}: {3}; {7}: {4}; '.format(*d.values()))
 
 
 class Training:
@@ -123,7 +123,7 @@ def read_package(workout_type: str, data: list) -> Training:
     workout_types: dict[str, Type] = {'SWM': Swimming,
                                       'RUN': Running,
                                       'WLK': SportsWalking}
-    for i in data[1::]:
+    for i in data:
         if type(i) is not int:
             raise TypeError('Work with Numbers Only')
         if i < 0:
@@ -134,7 +134,7 @@ def read_package(workout_type: str, data: list) -> Training:
 def main(training: Training) -> None:
     """Главная функция."""
     info: InfoMessage = training.show_training_info()
-    print(info.get_message())
+    print(info)
 
 
 if __name__ == '__main__':
